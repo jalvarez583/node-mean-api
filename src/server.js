@@ -7,7 +7,7 @@ const { connectToDatabase } = require('./services/database');
 
 const app = express();
 const port = process.env.PORT || 3000;
-const mongoURI = 'mongodb+srv://jorgeacerca:44%3FtegAcu@cluster0.v7vvfkn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'; // Cambia esto por tu URI de MongoDB
+const mongoURI = 'mongodb://localhost:27017/mydatabase'; // Cambia esto por tu URI de MongoDB
 
 connectToDatabase(mongoURI).then(() => {
     console.log('Connected to MongoDB');
