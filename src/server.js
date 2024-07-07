@@ -1,30 +1,26 @@
 const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const employeeRoutes = require('./routes/employeeRoutes');
-const { connectToDatabase } = require('./services/database');
-
+const cors = require('cors'); // Importar cors
 const app = express();
 const port = process.env.PORT || 3000;
-const mongoURI = 'mongodb://localhost:27017/mydatabase'; // Cambia esto por tu URI de MongoDB
 
-connectToDatabase(mongoURI).then(() => {
-    console.log('Connected to MongoDB');
+// Permitir CORS para todas las solicitudes
+app.use(cors());
 
-    const corsOptions = {
-        origin: '*', // Reemplaza esto por tu dominio permitido
-        methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-        allowedHeaders: ['Content-Type', 'Authorization']
-    };
+const users = [
+  { id: 1, name: 'John Doe', email: 'john.doe@example.com' },
+  { id: 2, name: 'Jane Smith', email: 'jane.smith@example.com' }
+];
 
-    app.use(cors(corsOptions)); // Habilitar CORS con opciones específicas
-    app.use(bodyParser.json());
-    app.use('/api', employeeRoutes);
+app.get('/user/:id', (req, res) => {
+  const userId = parseInt(req.params.id, 10);
+  const user = users.find(u => u.id === userId);
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404).send({ message: 'User not found' });
+  }
+});
 
-    app.listen(port, () => {
-        console.log(`Server running on port ${port}`);
-    });
-}).catch(err => {
-    console.error('Could not connect to MongoDB', err);
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
